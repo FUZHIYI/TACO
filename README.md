@@ -12,33 +12,38 @@ In brief, **T**oken-**A**lignment **C**ontrastive **O**bjective (TACO) is a simp
 
 With such MTL-style objectives, the model is able to learn not only the local meanings of tokens but also the global semantics of tokens. Our experiments show that, with the help of TC loss, TACO achieves up to **5x** speedup (1/5 pre-training steps) while obtaining better results on the GLUE benchmark compared to MLMs.  
 
-<img src="figs/taco_fig5.png" alt="taco_fig1.png" style="zoom:30%;" />
+<div align=center>
+<img src="figs/taco_fig5.png" alt="taco_fig1.png" width=450 locate=mid/>
+</div>
 
-<img src="figs/taco_tab1.png" alt="taco_fig1.png" style="zoom:40%;" />
-
+<div align=center>
+<img src="figs/taco_tab1.png" alt="taco_fig1.png" width=800 />
+</div>
 
 
 Here is the illustration of our proposed TC loss:
 
-<img src="figs/taco_fig1.png" alt="taco_fig1.png" style="zoom:25%;" />
+<div align=center>
+<img src="figs/taco_fig1.png" alt="taco_fig1.png" width=550 />
+</div>
 
 where $x^{(i)}$ and $x^{(j)}$ are natural language token sequences, such as sentences, from a text corpus. We take transformers as the encoder and it generates contextualized representations for all tokens. Then, the TC loss improves the representation quality by requiring all tokens from nearby positions to have a similar global semantic. To simplify, we take the simplest implementation, element-wise subtraction, to model the global part.
-$$
-g_i=enc(x)_i-x_i
-$$
+
+<div align=center>
+<img src="figs/eq1.png" alt="eq1.png" width=160 />
+</div>
+
 Finally, the TC loss formulates as follows,
-$$
-\begin{equation}
-  \mathcal{L}(g^{(i)}_{t1},g^{(i)}_{t2}) = -\mathbb{E} \left[ \log\frac{exp(cos(g^{(i)}_{t1},g^{(i)}_{t2})/\tau)}{exp(cos(g^{(i)}_{t1},g^{(i)}_{t2})/\tau) + \sum_{k=1}^{K}exp(cos(g^{(i)}_{t1},g^{(j)}_{tk})/\tau)}\right] 
-\end{equation}
-$$
-$g^{(i)}_{t1}$ and $g^{(i)}_{t2}$ are global semantics extracted from the same token sequence $x^{(i)}$, where $0<|t1-t2|<W$ and $W$ is the positive window size.  $g^{(j)}_{tk}$ is the global semantic extracted from other token sequences in the batch. Both positive $g^{(i)}_{t2}$  and negative $g^{(j)}_{tk}$  are randomly sampled on the fly. $K$ is the positive number and $\tau$ is the temperature hyper-parameter. In our implementation, we take each token's global semantic $g_i$ as the anchor once, and the overall loss can be written as follows:
-$$
-\begin{equation}
-\mathcal{L}_{\text{TC}} = \frac1N\sum_{i=1}^N\frac1L\sum_{l=1}^L\mathcal{L}(g^{(i)}_l, g^{(i)}_{l'\ne l})\\
-\mathcal{L}_{\text{TACO}}=\mathcal{L}_{\text{TC}} + \mathcal{L}_{\text{MLM}} \\
-\end{equation}
-$$
+
+<div align=center>
+<img src="figs/eq2.png" alt="eq2.png" width=550 />
+</div>
+
+g^{(i)}\_{t1} and g^{(i)}\_{t2} are global semantics extracted from the same token sequence $x^{(i)}$, where 0<|t1-t2|<W and W is the positive window size.  g^{(j)}\_{tk} is the global semantic extracted from other token sequences in the batch. Both positive g^{(i)}\_{t2} and negative g^{(j)}\_{tk} are randomly sampled on the fly. $K$ is the positive number and $\tau$ is the temperature hyper-parameter. In our implementation, we take each token's global semantic $g_i$ as the anchor once, and the overall loss can be written as follows:
+
+<div align=center>
+<img src="figs/eq3.png" alt="eq3.png" width=260 />
+</div>
 
 
 
