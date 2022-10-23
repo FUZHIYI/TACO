@@ -1,5 +1,6 @@
 #  TACO
-Code for the ACL 2022 paper "Contextual Representation Learning beyond Masked Language Modeling"
+Code for the ACL 2022 paper "Contextual Representation Learning beyond Masked Language Modeling"  
+<br>
 
 
 
@@ -45,6 +46,7 @@ g^{(i)}\_{t1} and g^{(i)}\_{t2} are global semantics extracted from the same tok
 <img src="figs/eq3.png" alt="eq3.png" width=260 />
 </div>
 
+<br>
 
 
 ### Requirements
@@ -78,6 +80,7 @@ python3 -m pip install -r requirements.txt
 cd -
 ```
 
+<br>
 
 
 ### Preparation
@@ -108,6 +111,7 @@ cd ..
 
 The pre-training datasets include **Wikipedia** and **Bookscorpus**. The script will help you download them automatically when you run the pre-training code for the first time.
 
+<br>
 
 
 ### Pre-training
@@ -142,6 +146,7 @@ The meanings of the last three parameters are:
 
 See the corresponding script for more details. 
 
+<br>
 
 
 ### Fine-tuning
@@ -159,9 +164,9 @@ bash finetune_small.sh ./pretrain_results/saved_small_models/checkpoint-100000 r
 
 Please refer to the Appendix in the paper for more pre-training and fine-tuning details.
 
+<br>
 
-
-### Citation
+## Citation
 
 ```bibtex
 @inproceedings{fu-etal-2022-contextual,
